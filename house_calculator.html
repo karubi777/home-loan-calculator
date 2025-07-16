@@ -557,6 +557,32 @@
             return principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
         }
 
+        // URLパラメータ取得
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        // URLパラメータをフォームにセット
+        function applyQueryParamsToInputs() {
+            const keys = [
+                'loanAmount', 'interestRate', 'loanPeriod', 'bonusPayment', 'bonusTimesPerYear',
+                'husbandIncome', 'wifeIncome', 'food', 'utilities', 'communication', 'transport',
+                'insurance', 'childExpenses', 'medical', 'dailyGoods', 'clothing', 'entertainment',
+                'beauty', 'social', 'savings', 'car', 'propertyTax', 'maintenance', 'other'
+        ];
+
+        keys.forEach(key => {
+            const value = getQueryParam(key);
+                if (value !== null) {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        input.value = value;
+                    }
+                }
+            });
+        }
+        
         function calculate() {
             // 入力値取得
             const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
@@ -564,12 +590,12 @@
             const loanPeriod = parseFloat(document.getElementById('loanPeriod').value) || 0;
             const husbandIncome = parseFloat(document.getElementById('husbandIncome').value) || 0;
             const wifeIncome = parseFloat(document.getElementById('wifeIncome').value) || 0;
-    const bonusPayment = parseFloat(document.getElementById('bonusPayment').value) || 0;
-    const bonusTimesPerYear = parseFloat(document.getElementById('bonusTimesPerYear').value) || 0;
-    const totalMonths = loanPeriod * 12;
-    const totalBonusPayments = loanPeriod * bonusTimesPerYear;
-    const totalBonusAmount = bonusPayment * totalBonusPayments;
-    const regularPrincipal = loanAmount - totalBonusAmount;
+            const bonusPayment = parseFloat(document.getElementById('bonusPayment').value) || 0;
+            const bonusTimesPerYear = parseFloat(document.getElementById('bonusTimesPerYear').value) || 0;
+            const totalMonths = loanPeriod * 12;
+            const totalBonusPayments = loanPeriod * bonusTimesPerYear;
+            const totalBonusAmount = bonusPayment * totalBonusPayments;
+            const regularPrincipal = loanAmount - totalBonusAmount;
 
 
             // 生活費項目
@@ -764,7 +790,7 @@
             event.target.classList.add('active');
         }
 
-        // 初期計算
+        applyQueryParamsToInputs();
         calculate();
     </script>
 </body>
