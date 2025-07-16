@@ -419,6 +419,12 @@
                 </div>
             </div>
         </div>
+        
+            <h2>🔗 URL生成</h2>
+            <div style="margin-top: 10px;">
+            　　 <button onclick="generateUrl()">この設定のURLを生成</button>
+                <input type="text" id="generatedUrl" style="width: 100%; margin-top: 10px;" readonly>
+            </div>
 
         <div id="results" class="sheet-content">
             <h2>📈 計算結果</h2>
@@ -582,7 +588,35 @@
                 }
             });
         }
-        
+
+    function generateUrl() {
+        const baseUrl = location.origin + location.pathname;
+
+        const keys = [
+            'loanAmount', 'interestRate', 'loanPeriod', 'bonusPayment', 'bonusTimesPerYear',
+            'husbandIncome', 'wifeIncome', 'food', 'utilities', 'communication', 'transport', 'insurance',
+            'childExpenses', 'medical', 'dailyGoods', 'clothing', 'entertainment',
+            'beauty', 'social', 'savings', 'petExpense', 'car', 'propertyTax', 'maintenance', 'other'
+        ];
+
+        const params = keys.map(key => {
+            const el = document.getElementById(key);
+            if (el && el.value !== '') {
+                return encodeURIComponent(key) + '=' + encodeURIComponent(el.value);
+            }
+            return null;
+        }).filter(x => x !== null);
+
+        const url = baseUrl + '?' + params.join('&');
+
+        const output = document.getElementById('generatedUrl');
+        output.value = url;
+        output.select();
+        document.execCommand('copy'); // 自動コピー（対応ブラウザのみ）
+
+        alert('URLを生成してクリップボードにコピーしました！\n\n' + url);
+    }
+
         function calculate() {
             // 入力値取得
             const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
